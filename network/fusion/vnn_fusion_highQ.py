@@ -10,7 +10,7 @@ class VNN_F(nn.Module):
 #         self.conv10 = nn.Conv3d(num_ch, nch_out0, kernel_size=(1, 1, 1), padding=(0, 0, 0))
 #         self.bn10 = nn.BatchNorm3d(nch_out0)
 #         self.conv20 = nn.Conv3d(num_ch, 2*Q0*nch_out0, kernel_size=(1, 1, 1), padding=(0, 0, 0))
-# #         self.pool1 = nn.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+#         self.pool1 = nn.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
 #         self.bn20 = nn.BatchNorm3d(nch_out0)
 
         Q1 = 2
@@ -26,7 +26,7 @@ class VNN_F(nn.Module):
 #         self.conv11_red = nn.Conv3d(nch_out1, nch_out1_red, kernel_size=(1, 1, 1), padding=(0, 0, 0))
 #         self.bn11_red = nn.BatchNorm3d(nch_out1_red)
 #         self.conv21_red = nn.Conv3d(nch_out1, 2*Q1_red*nch_out1_red, kernel_size=(1, 1, 1), padding=(0, 0, 0))
-# #         self.pool1 = nn.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
+#         self.pool1 = nn.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
 #         self.bn21_red = nn.BatchNorm3d(nch_out1_red)
 
 #         Q2 = 2
@@ -38,10 +38,7 @@ class VNN_F(nn.Module):
 #         self.bn22 = nn.BatchNorm3d(nch_out2)
         
         self.fc8 = nn.Linear(12544, num_classes)
-
         self.dropout = nn.Dropout(p=0.5)
-
-        
 
         self.__init_weight()
         
@@ -62,13 +59,10 @@ class VNN_F(nn.Module):
 
         Q1=2
         nch_out1 = 256
-
         x11 = self.conv11(x)
-        x11 = self.bn11(x11)
-        
+        x11 = self.bn11(x11)        
         x21 = self.conv21(x)
-        
- 
+         
         x21_mul = torch.mul(x21[:,0:Q1*nch_out1,:,:,:],x21[:,Q1*nch_out1:2*Q1*nch_out1,:,:,:])
         x21_add = torch.zeros_like(x11)
         for q in range(Q1):
@@ -112,8 +106,7 @@ class VNN_F(nn.Module):
         
 #         print(x.shape)
         x = x.view(-1, 12544)
-        
-        
+
         x = self.dropout(x)
      
         logits = self.fc8(x)
